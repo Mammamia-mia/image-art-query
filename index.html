@@ -320,7 +320,7 @@
 
     table {
       width: 100%;
-      min-width: 2140px;
+      min-width: 1980px;
       border-collapse: separate;
       border-spacing: 0;
       table-layout: fixed;
@@ -366,12 +366,11 @@
     th:nth-child(5) { width: 100px; }
     th:nth-child(6) { width: 115px; }
     th:nth-child(7) { width: 260px; }
-    th:nth-child(8) { width: 160px; }
-    th:nth-child(9) { width: 135px; }
-    th:nth-child(10) { width: 155px; }
-    th:nth-child(11), th:nth-child(12) { width: 95px; }
-    th:nth-child(13) { width: 290px; }
-    th:nth-child(14) { width: 120px; }
+    th:nth-child(8) { width: 135px; }
+    th:nth-child(9) { width: 155px; }
+    th:nth-child(10), th:nth-child(11) { width: 95px; }
+    th:nth-child(12) { width: 290px; }
+    th:nth-child(13) { width: 120px; }
 
     .empty-state td {
       height: 180px;
@@ -615,8 +614,8 @@ lucide.createIcons({icons});\``);if(typeof document>"u")throw new Error("`create
         "PMDJ-DG02": "入口吊挂（双面）",
         "PMDJ-GH": "入口挂画"
       });
-      var DISPLAY_HEADERS = HEADERS.slice();
-      DISPLAY_HEADERS.splice(HEADER_INDEX["道具规格编号"] + 1, 0, "道具名称");
+      var DISPLAY_HEADERS = HEADERS.filter(function (header) { return header !== "道具规格名称"; });
+      DISPLAY_HEADERS.splice(DISPLAY_HEADERS.indexOf("道具规格编号") + 1, 0, "道具名称");
       var FILTER_LABELS = {
         "区域": "区域",
         "区经": "区经",
@@ -1060,7 +1059,7 @@ lucide.createIcons({icons});\``);if(typeof document>"u")throw new Error("`create
           var xml = document.implementation.createDocument(namespace, "worksheet", null);
           var sheet = xml.documentElement;
           var dimension = xml.createElementNS(namespace, "dimension");
-          dimension.setAttribute("ref", "A1:N" + (state.filteredRows.length + 1));
+          dimension.setAttribute("ref", "A1:" + String.fromCharCode(64 + DISPLAY_HEADERS.length) + (state.filteredRows.length + 1));
           sheet.appendChild(dimension);
           var views = xml.createElementNS(namespace, "sheetViews");
           var view = xml.createElementNS(namespace, "sheetView");
@@ -1074,7 +1073,7 @@ lucide.createIcons({icons});\``);if(typeof document>"u")throw new Error("`create
           views.appendChild(view);
           sheet.appendChild(views);
 
-          var widths = [14, 12, 13, 30, 12, 15, 38, 22, 18, 24, 14, 14, 50, 18];
+          var widths = [14, 12, 13, 30, 12, 15, 38, 22, 18, 14, 14, 50, 18];
           var columns = xml.createElementNS(namespace, "cols");
           widths.forEach(function (width, index) {
             var column = xml.createElementNS(namespace, "col");
