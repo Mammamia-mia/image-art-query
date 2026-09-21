@@ -359,6 +359,55 @@
     td.numeric { text-align: right; font-variant-numeric: tabular-nums; }
     td.code { font-family: "SFMono-Regular", Consolas, "Liberation Mono", monospace; color: #254b42; }
 
+    .table-tag {
+      display: inline-flex;
+      align-items: center;
+      max-width: 100%;
+      min-height: 24px;
+      padding: 2px 8px;
+      border: 1px solid #d7e4dc;
+      border-radius: 999px;
+      background: #eef6f1;
+      color: #245e4f;
+      font-size: 12px;
+      line-height: 18px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      vertical-align: middle;
+      box-sizing: border-box;
+    }
+
+    .table-tag.status.active {
+      border-color: #b9dfcc;
+      background: #eaf7ef;
+      color: #197044;
+    }
+
+    .table-tag.status.closed {
+      border-color: #e6caca;
+      background: #fff1f1;
+      color: #a53d3d;
+    }
+
+    .table-tag.status.pending {
+      border-color: #e6d6b6;
+      background: #fff8e8;
+      color: #8a5b12;
+    }
+
+    .table-tag.spec {
+      border-color: #cdddec;
+      background: #eff5fb;
+      color: #315b82;
+    }
+
+    .table-tag.name {
+      border-color: #cfe0dc;
+      background: #f0f7f5;
+      color: #2e655a;
+    }
+
     th:nth-child(1) { width: 100px; }
     th:nth-child(2) { width: 90px; }
     th:nth-child(3) { width: 105px; }
@@ -905,10 +954,21 @@ lucide.createIcons({icons});\``);if(typeof document>"u")throw new Error("`create
             DISPLAY_HEADERS.forEach(function (header) {
               var value = rowValue(row, header);
               var td = document.createElement("td");
-              td.textContent = value === null || value === undefined ? "" : String(value);
-              td.title = td.textContent;
+              var text = value === null || value === undefined ? "" : String(value);
+              td.title = text;
               if (header === "宽（mm）" || header === "高（mm）") td.classList.add("numeric");
               if (header === "门店编码" || header === "道具规格编号") td.classList.add("code");
+              if (header === "门店状态" || header === "道具规格编号" || header === "道具名称") {
+                var tag = document.createElement("span");
+                var tagType = header === "门店状态" ? "status" : (header === "道具规格编号" ? "spec" : "name");
+                var statusType = text === "已闭店" ? "closed" : ((text === "待营业" || text === "待闭店") ? "pending" : "active");
+                tag.className = "table-tag " + tagType + (header === "门店状态" ? " " + statusType : "");
+                tag.textContent = text;
+                tag.title = text;
+                td.appendChild(tag);
+              } else {
+                td.textContent = text;
+              }
               tr.appendChild(td);
             });
             fragment.appendChild(tr);
